@@ -39,7 +39,7 @@ function App() {
   return (
     <div className="app">
       <div className="todo-container">
-        <h1>✨ Task Manager</h1>
+        <h1>✨ Task Planner</h1>
         <div className="input-row">
           <input
             value={input}

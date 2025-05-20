@@ -11,7 +11,7 @@
 
 .todo-item.completed span {
   text-decoration: line-through;
-  color: #888;
+  color: #a29e9e;
 }
 
 .todo-item input {
