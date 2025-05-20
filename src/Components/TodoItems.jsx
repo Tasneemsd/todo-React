@@ -1,54 +1,42 @@
-import { useState } from 'react';
-import { FaCheck, FaUndo, FaEdit, FaTrash, FaSave } from 'react-icons/fa';
+import React, { useState } from "react";
+import './TodoItems.css';
+import { FaTrash, FaEdit, FaSave } from "react-icons/fa";
+import { MdCheckCircle, MdRadioButtonUnchecked } from "react-icons/md";
 
 function TodoItem({ todo, deleteTodo, toggleComplete, updateTodo }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.text);
+  const [editedText, setEditedText] = useState(todo.text);
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    updateTodo(todo.id, editText);
+  const handleSave = () => {
+    updateTodo(todo.id, editedText);
     setIsEditing(false);
   };
 
   return (
-    <div className={`todo-item ${todo.isCompleted ? 'completed' : ''}`}>
+    <div className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+      <span className="category-tag">{todo.category}</span>
+
       {isEditing ? (
-        <form onSubmit={handleUpdate}>
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            autoFocus
-          />
-          <button type="submit"><FaSave /> Save</button>
-        </form>
+        <input
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSave()}
+        />
       ) : (
-        <>
-          <span className="todo-text">{todo.text}</span>
-          <div className="actions">
-            <button 
-              onClick={() => toggleComplete(todo.id)}
-              className="complete-btn"
-            >
-              {todo.isCompleted ? <FaUndo /> : <FaCheck />}
-              <span className="action-text">{todo.isCompleted ? 'Undo' : 'Complete'}</span>
-            </button>
-            <button 
-              onClick={() => setIsEditing(true)}
-              className="edit-btn"
-            >
-              <FaEdit /> <span className="action-text">Edit</span>
-            </button>
-            <button 
-              onClick={() => deleteTodo(todo.id)}
-              className="delete-btn"
-            >
-              <FaTrash /> <span className="action-text">Delete</span>
-            </button>
-          </div>
-        </>
+        <span>{todo.text}</span>
       )}
+
+      <div className="actions">
+        <button onClick={() => toggleComplete(todo.id)}>
+          {todo.completed ? <MdCheckCircle /> : <MdRadioButtonUnchecked />}
+        </button>
+        {isEditing ? (
+          <button onClick={handleSave}><FaSave /></button>
+        ) : (
+          <button onClick={() => setIsEditing(true)}><FaEdit /></button>
+        )}
+        <button onClick={() => deleteTodo(todo.id)}><FaTrash /></button>
+      </div>
     </div>
   );
 }
